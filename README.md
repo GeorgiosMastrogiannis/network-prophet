@@ -8,7 +8,7 @@ reserve November 9–11 for Python and Terraform coding practice.
 
 Implemented: saved-plan reader, nested modules, before/after snapshots,
 unknown-marker preservation, inspection CLI, pytest suite, and GitHub Actions configuration.
-The CIDR function is an explicit exercise. Network findings are not implemented.
+The CIDR function is implemented and tested. Network findings are not implemented.
 An inspection exit code of 0 means the input was read, not that the network is safe.
 CI is configured but has not been run on GitHub.
 
@@ -26,7 +26,12 @@ network-guardian fixtures/subnet-change.json
 Python 3.9+; runtime dependencies are standard library only. No OCI account is
 needed for these synthetic tests. Never commit a real plan containing secrets.
 
-## First exercise: CIDR overlap (15–25 minutes)
+## Completed exercise: CIDR overlap
+
+Implemented by Georgios with AI review; all 21 current tests pass locally.
+The instructions below document the original assignment.
+
+### Original assignment (15–25 minutes)
 
 1. Read `network_guardian/plan.py` and `tests/test_plan.py`. Explain why an unknown
    security-list association must survive parsing.
@@ -64,3 +69,25 @@ See `DESIGN.md` for the intended model and exclusions.
 
 References: [Terraform JSON format](https://developer.hashicorp.com/terraform/internals/json-format)
 and [OCI security-list resource](https://docs.oracle.com/en-us/iaas/tools/terraform-provider-oci/latest/docs/r/core_security_list.html).
+
+## Contribution history and AI assistance
+
+The GitHub repository is named `network-prophet`; the Python package and CLI
+retain their initial Network Change Guardian names.
+
+Commit prefixes describe contribution provenance:
+
+- `scaffold:` AI-generated project foundations.
+- `exercise:` implementations written by Georgios; the commit body records AI assistance.
+- `docs:` documentation changes, with assistance recorded in the commit body.
+
+The initial scaffold and first exercise were reconstructed as separate commits
+from the saved scaffold and completed working files. They are retrospective
+records, not the original edit-time history. The existing GitHub initial commit
+is preserved. Git author metadata uses the configured committer identity;
+these messages describe code provenance, rather than claiming separate human
+and AI Git accounts.
+
+Georgios implemented CIDR overlap and simplified it after AI feedback. Codex
+supplied the corrected inside/outside /32 test example. Future exercises should
+start from a committed scaffold so their changes can be recorded directly.
