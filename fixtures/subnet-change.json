@@ -1,0 +1,63 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.5.7",
+  "prior_state": {
+    "values": {
+      "root_module": {
+        "resources": [
+          {
+            "address": "oci_core_subnet.app",
+            "mode": "managed",
+            "type": "oci_core_subnet",
+            "values": {
+              "id": "ocid1.subnet.example",
+              "vcn_id": "ocid1.vcn.example",
+              "cidr_block": "10.0.1.0/24"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "oci_core_subnet.app",
+          "mode": "managed",
+          "type": "oci_core_subnet",
+          "values": {
+            "id": "ocid1.subnet.example",
+            "vcn_id": "ocid1.vcn.example",
+            "cidr_block": "10.0.2.0/24"
+          }
+        }
+      ]
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "oci_core_subnet.app",
+      "mode": "managed",
+      "type": "oci_core_subnet",
+      "change": {
+        "actions": [
+          "update"
+        ],
+        "before": {
+          "id": "ocid1.subnet.example",
+          "vcn_id": "ocid1.vcn.example",
+          "cidr_block": "10.0.1.0/24"
+        },
+        "after": {
+          "id": "ocid1.subnet.example",
+          "vcn_id": "ocid1.vcn.example",
+          "cidr_block": "10.0.2.0/24"
+        },
+        "after_unknown": {
+          "security_list_ids": true
+        }
+      }
+    }
+  ]
+}
