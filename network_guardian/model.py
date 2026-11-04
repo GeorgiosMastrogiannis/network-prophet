@@ -22,8 +22,21 @@ def subnet_from_resource(resource: Resource) -> Subnet:
         if resource.unknown.get("vcn_id") is True or resource.unknown.get("cidr_block") is True:
             raise UnknownSubnetError("Subnet VCN or CIDR is unknown")
 
-    vcn_id = resource.values["vcn_id"]
-    cidr_block = resource.values["cidr_block"]
+    vcn_id = resource.values.get("vcn_id")
+    cidr_block = resource.values.get("cidr_block")
+
+    if not isinstance(vcn_id, str):
+        raise ValueError("vcn_id must be a string")
+
+    if len(vcn_id.strip()) == 0:
+        raise ValueError("vcn_id cannot be empty")
+    
+    if not isinstance(cidr_block, str):
+        raise ValueError("cidr_block must be a string")
+
+    if len(cidr_block.strip()) == 0:
+        raise ValueError("cidr_block cannot be empty")    
+
     network = ipaddress.ip_network(cidr_block)
     
     if network.version != 4:

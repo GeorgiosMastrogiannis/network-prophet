@@ -90,11 +90,6 @@ def test_subnet_host_bits_rejected():
     with pytest.raises(ValueError):
         subnet_from_resource(resource)
 
-"""
-Add tests for each case, including one where 
-values contains a plausible CIDR but its unknown marker is True. The marker must take precedence.
-"""
-
 def test_subnet_resource_unknown():
     resource = Resource(
         address="oci_core_subnet.app",
@@ -156,3 +151,39 @@ def test_subnet_security_list_ids_unknown():
 
     subnet = subnet_from_resource(resource)
     assert subnet.cidr == ipaddress.IPv4Network("10.0.1.0/24")
+
+@pytest.mark.parametrize("values", [
+    {"cidr_block": "10.0.1.0/24"},
+    {"vcn_id": None, "cidr_block": "10.0.1.0/24"},
+    {"vcn_id": 123, "cidr_block": "10.0.1.0/24"},
+    {"vcn_id": "", "cidr_block": "10.0.1.0/24"},
+    {"vcn_id": " ", "cidr_block": "10.0.1.0/24"},
+])
+def test_invalid_vcn_id(values):
+    resource = Resource(
+        address="oci_core_subnet.app",
+        kind="oci_core_subnet",
+        values=values,
+        unknown={},
+    )
+
+    with pytest.raises(ValueError, match="vcn_id"):
+        subnet_from_resource(resource)
+
+@pytest.mark.parametrize("values", [
+    {"vcn_id": "ocid1.vcn.example"},
+    {"vcn_id": "ocid1.vcn.example", "cidr_block": None},
+    {"vcn_id": "ocid1.vcn.example", "cidr_block": 123},
+    {"vcn_id": "ocid1.vcn.example", "cidr_block": ""},
+    {"vcn_id": "ocid1.vcn.example", "cidr_block": " "},
+])
+def test_invalid_cidr_block(values):
+    resource = Resource(
+        address="oci_core_subnet.app",
+        kind="oci_core_subnet",
+        values=values,
+        unknown={},
+    )
+
+    with pytest.raises(ValueError, match="cidr_block"):
+        subnet_from_resource(resource)
