@@ -5,3 +5,4 @@ __pycache__/
 *.tfstate*
 .terraform/
 *.tfplan
+.DS_Store
