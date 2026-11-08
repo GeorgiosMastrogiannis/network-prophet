@@ -1,8 +1,9 @@
-"""Milestone 1 CLI: inspect snapshots; no safety verdict yet."""
+"""Check IPv4 subnet CIDR overlaps within each VCN in a Terraform plan."""
 import argparse
 import json
 from pathlib import Path
 import sys
+from network_guardian.analysis import analyze_overlaps
 
 from network_guardian.plan import read_plan
 
@@ -13,16 +14,18 @@ def main() -> int:
     args = parser.parse_args()
     try:
         snapshots = read_plan(json.loads(args.plan.read_text(encoding="utf-8")))
+        result = analyze_overlaps(snapshots)
     except (OSError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
-    print(json.dumps({
-        "status": "inspection_only",
-        "before_resources": len(snapshots.before),
-        "after_resources": len(snapshots.after),
-        "unknown_resource_addresses": [r.address for r in snapshots.after if r.unknown],
-        "message": "Network checks are not implemented yet; this is not a safety verdict.",
-    }, indent=2))
+    print(json.dumps(result, indent=2))
+    
+    if result["incomplete"]:
+        return 3
+
+    if result["after"]:
+        return 1
+
     return 0
 
 
